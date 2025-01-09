@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home() {
         return "Thank God you made it to the home page!";
     }
@@ -15,6 +15,7 @@ public class HomeController {
     public String secured() {
         return "Hello, you are secured!";
     }
+
 
 
 }
