@@ -1,11 +1,11 @@
 package com.coderscampus.babytracker.domain;
 
 import jakarta.persistence.*;
+import java.util.List;
 
-import java.util.Set;
 
 @Entity
-@Table(name="parent")
+@Table(name = "parent")
 public class Parent {
     private String name;
 
@@ -16,8 +16,10 @@ public class Parent {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @ManyToMany(mappedBy= "children")
-    private Set<Child> children;
+//    private List<Child> children;
+//@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+@OneToMany(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+private List<Child> children;
 
     public String getName() {
         return name;
@@ -43,11 +45,11 @@ public class Parent {
         this.email = email;
     }
 
-    public Set<Child> getChildren() {
+    public List<Child> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Child> children) {
+    public void setChildren(List<Child> children) {
         this.children = children;
     }
 
