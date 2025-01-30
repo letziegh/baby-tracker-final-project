@@ -7,11 +7,14 @@ import java.util.List;
 @Entity
 @Table(name = "parent")
 public class Parent {
-    private String name;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -20,6 +23,12 @@ public class Parent {
 //@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 @OneToMany(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 private List<Child> children;
+
+
+
+
+
+
 
     public String getName() {
         return name;
