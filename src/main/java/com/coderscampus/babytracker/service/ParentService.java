@@ -4,6 +4,8 @@ import com.coderscampus.babytracker.domain.Parent;
 import com.coderscampus.babytracker.repository.ParentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ParentService {
 
@@ -13,7 +15,7 @@ public class ParentService {
         this.parentRepository = parentRepository;
     }
     public Parent findByEmail(String email) {
-        return parentRepository.findBy(email);
+        return parentRepository.findByEmail(email).orElse(null);
     }
     public Parent save(Parent parent) {
         return parentRepository.save(parent);

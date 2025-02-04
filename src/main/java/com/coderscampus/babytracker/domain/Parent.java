@@ -1,6 +1,8 @@
 package com.coderscampus.babytracker.domain;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,10 +26,15 @@ public class Parent {
 @OneToMany(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 private List<Child> children;
 
+    public Parent(String email, String name) {
+        this.email = email;
+        this.name = name;
 
+    }
 
+    public Parent() {
 
-
+    }
 
 
     public String getName() {
@@ -64,7 +71,7 @@ private List<Child> children;
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Parent{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", email='" + email + '\'' +

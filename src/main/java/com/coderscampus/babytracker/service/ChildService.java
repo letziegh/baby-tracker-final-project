@@ -27,4 +27,8 @@ public class ChildService {
     public List<Child> getChildrenByParent(Long parentId) {
         return childRepository.findByParentId(parentId);
     }
+
+    public void deleteChild(Long id) {
+        childRepository.deleteById(id);
+    }
 }
