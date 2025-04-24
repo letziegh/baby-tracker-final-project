@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 public class SecurityConfig {
@@ -18,22 +20,55 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers("/api/**", "/logout") // Ignore CSRF for logout endpoint
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/", "/login", "/error", "/logout-success", "/api/parent/update-username", "/webjars/**", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
+                        .loginPage("/")
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .failureUrl("/login?error=true")//redirect on error
                         .defaultSuccessUrl("/dashboard", true)
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutUrl("/logout") // Specify the logout URL
+                        .logoutSuccessUrl("/logout-success")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
                 );
         return http.build();
     }
 }
+
+//     @Bean
+//     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//         http
+//                 .authorizeHttpRequests(auth -> auth
+//                         .requestMatchers("/", "/login", "/error", "/api/parent/update-username").permitAll()
+//                         .anyRequest().authenticated()
+//                 )
+//                 .oauth2Login(oauth -> oauth
+//                // .loginPage("/")
+//                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+//                         .failureUrl("/login?error=true")//redirect on error
+//                         .defaultSuccessUrl("/dashboard", true)
+//                 )
+//                 .logout(logout -> logout
+//                         .logoutSuccessUrl("/")
+//                         .permitAll()
+//                 );
+//         return http.build();
+//     }
+// }
 
 //method below will change the behavior of security filter chain to only allow authenticated users to enter into the home pa
 

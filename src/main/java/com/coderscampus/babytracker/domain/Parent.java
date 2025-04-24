@@ -2,12 +2,11 @@ package com.coderscampus.babytracker.domain;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-@Table(name = "parent")
+@Table(name = "Parent")
 public class Parent {
 
 
