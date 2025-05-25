@@ -8,7 +8,12 @@
 <h1 class="mt-4">Welcome, <span id="parent-name" th:text="${parent?.name ?: 'null'}"></span>!</h1>
 <p>Your email: <span id="parent-email" th:text="${parent?.email?: 'null'}"></span></p>
 <script src="/js/create-username.js"></script> <!-- Include JavaScript file -->
-<a href="/logout" class="btn btn-danger">Logout</a>
+
+<!-- Proper logout form with CSRF token -->
+<form th:action="@{/logout}" method="post" style="display: inline;">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
 </body>
 </html>
 

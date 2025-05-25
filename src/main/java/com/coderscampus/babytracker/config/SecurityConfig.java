@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/api/**", "/logout") // Ignore CSRF for logout endpoint
+                        .ignoringRequestMatchers("/api/**") // Only if you have stateless API endpoints
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/error", "/logout-success", "/api/parent/update-username", "/webjars/**", "/css/**", "/js/**").permitAll()
@@ -34,10 +34,10 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/dashboard", true)
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // Specify the logout URL
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/logout-success")
-                        .clearAuthentication(true)
                         .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
