@@ -1,8 +1,11 @@
 package com.coderscampus.babytracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,10 +23,12 @@ public class Child {
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
+    @JsonBackReference
     private Parent parent;
 
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Activity> activities;
+    @JsonManagedReference
+    private Set<Activity> activities = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -71,8 +76,6 @@ public class Child {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthdate=" + birthdate +
-                ", parent=" + parent +
-                ", activities=" + activities +
                 '}';
     }
 }

@@ -1,15 +1,14 @@
 package com.coderscampus.babytracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "Parent")
 public class Parent {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,21 +19,17 @@ public class Parent {
     @Column(nullable = false, unique = true)
     private String email;
 
-//    private List<Child> children;
-//@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-@OneToMany(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-private List<Child> children;
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Child> children = new ArrayList<>();
 
     public Parent(String email, String name) {
         this.email = email;
         this.name = name;
-
     }
 
     public Parent() {
-
     }
-
 
     public String getName() {
         return name;
@@ -74,8 +69,6 @@ private List<Child> children;
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", email='" + email + '\'' +
-                ", children=" + children +
                 '}';
     }
-
 }

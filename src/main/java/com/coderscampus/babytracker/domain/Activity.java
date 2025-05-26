@@ -1,5 +1,6 @@
 package com.coderscampus.babytracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,7 +9,7 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String activityType;
 
     @Column
@@ -22,6 +23,7 @@ public class Activity {
 
     @ManyToOne
     @JoinColumn(name = "child_id", nullable = false)
+    @JsonBackReference
     private Child child;
 
     public Long getId() {
@@ -71,6 +73,7 @@ public class Activity {
     public void setChild(Child child) {
         this.child = child;
     }
+
     @Override
     public String toString() {
         return "Activity{" +
@@ -79,8 +82,6 @@ public class Activity {
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", notes='" + notes + '\'' +
-                ", child=" + child.getName() +
                 '}';
     }
-
 }
