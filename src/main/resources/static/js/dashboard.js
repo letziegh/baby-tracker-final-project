@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const childId = document.getElementById('selectedChildId').value;
         
         const activityData = {
-            type: activityType,
+            activityType: activityType,
             startTime: startTime,
             endTime: endTime,
             notes: notes,
@@ -120,7 +120,7 @@ function loadChildren() {
                         <h5 class="card-title">${child.name}</h5>
                         <p class="card-text">Birthdate: ${new Date(child.birthdate).toLocaleDateString()}</p>
                         <button class="btn btn-primary" onclick="showActivityForm(${child.id})">Add Activity</button>
-                        <a href="/child/${child.id}/activities" class="btn btn-info">View Activities</a>
+                        <a href="/api/children/${child.id}/activities" class="btn btn-info">View Activities</a>
                     </div>
                 `;
                 childrenList.appendChild(childElement);
