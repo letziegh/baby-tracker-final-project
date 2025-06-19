@@ -58,8 +58,57 @@ function loadActivities() {
 }
 
 function editActivity(activity) {
-    // Implement edit functionality
-    alert('Edit functionality to be implemented');
+    // Populate the edit form with activity data
+    document.getElementById('editActivityId').value = activity.id;
+    document.getElementById('editActivityType').value = activity.activityType;
+    document.getElementById('editStartTime').value = formatDateTimeForInput(activity.startTime);
+    document.getElementById('editEndTime').value = activity.endTime ? formatDateTimeForInput(activity.endTime) : '';
+    document.getElementById('editNotes').value = activity.notes || '';
+
+    // Show the modal
+    const editModal = new bootstrap.Modal(document.getElementById('editActivityModal'));
+    editModal.show();
+}
+
+function formatDateTimeForInput(dateTimeString) {
+    const date = new Date(dateTimeString);
+    return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+}
+
+function updateActivity() {
+    const activityId = document.getElementById('editActivityId').value;
+    const activityData = {
+        id: activityId,
+        activityType: document.getElementById('editActivityType').value,
+        startTime: document.getElementById('editStartTime').value,
+        endTime: document.getElementById('editEndTime').value || null,
+        notes: document.getElementById('editNotes').value,
+        child: {
+            id: document.getElementById('childId').value
+        }
+    };
+
+    fetch(`/api/activities/${activityId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(activityData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Close the modal
+        const editModal = bootstrap.Modal.getInstance(document.getElementById('editActivityModal'));
+        editModal.hide();
+        // Reload activities
+        loadActivities();
+    })
+    .catch(error => {
+        console.error('Error updating activity:', error);
+        alert('Error updating activity. Please try again.');
+    });
 }
 
 function deleteActivity(activityId) {

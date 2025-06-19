@@ -70,6 +70,12 @@ public class Child {
         this.activities = activities;
     }
 
+    public String getAge() {
+        if (birthdate == null) return "";
+        java.time.Period age = java.time.Period.between(birthdate, java.time.LocalDate.now());
+        return String.format("%d years, %d months", age.getYears(), age.getMonths());
+    }
+
     @Override
     public String toString() {
         return "Child{" +

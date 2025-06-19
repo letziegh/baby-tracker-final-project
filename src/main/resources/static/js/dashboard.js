@@ -118,7 +118,7 @@ function loadChildren() {
                 childElement.innerHTML = `
                     <div class="card-body">
                         <h5 class="card-title">${child.name}</h5>
-                        <p class="card-text">Birthdate: ${new Date(child.birthdate).toLocaleDateString()}</p>
+                        <p class="card-text">Age: ${child.age}</p>
                         <button class="btn btn-primary" onclick="showActivityForm(${child.id})">Add Activity</button>
                         <a href="/api/children/${child.id}/activities" class="btn btn-info">View Activities</a>
                     </div>
