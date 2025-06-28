@@ -21,6 +21,9 @@ public class Child {
     @Column(nullable = false)
     private LocalDate birthdate;
 
+    @Column
+    private String gender;
+
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     @JsonBackReference
@@ -54,6 +57,14 @@ public class Child {
         this.birthdate = birthdate;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public Parent getParent() {
         return parent;
     }
@@ -82,6 +93,7 @@ public class Child {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthdate=" + birthdate +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 }

@@ -46,6 +46,17 @@ public class ChildService {
         return childRepository.findByParentId(parentId);
     }
 
+    public Child updateChild(Long id, Child child) {
+        return childRepository.findById(id)
+                .map(existingChild -> {
+                    existingChild.setName(child.getName());
+                    existingChild.setBirthdate(child.getBirthdate());
+                    existingChild.setGender(child.getGender());
+                    return childRepository.save(existingChild);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Child not found"));
+    }
+
     public void deleteChild(Long id) {
         childRepository.deleteById(id);
     }

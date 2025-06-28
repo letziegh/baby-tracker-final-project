@@ -53,6 +53,12 @@ public class ChildController {
         return childService.addChild(child);
     }
 
+    @PutMapping("/{id}")
+    @ResponseBody
+    public Child updateChild(@PathVariable Long id, @RequestBody Child child) {
+        return childService.updateChild(id, child);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseBody
     public void deleteChild(@PathVariable Long id) {

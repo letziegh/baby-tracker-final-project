@@ -39,13 +39,44 @@
             </div>
             <div class="card-body">
                 <div id="childrenList">
-                    <!-- <strong th:text="${child.name}"></strong> - <span th:text="${child.age}"></span> -->
-
                     <!-- Children will be loaded here dynamically -->
+                    
                 </div>
             </div>
         </div>
-        
+        <div class="modal fade" id="editChildModal" tabindex="-1" aria-labelledby="editChildModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editChildModalLabel">Edit Child</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editChildForm">
+                            <input type="hidden" id="editChildId">
+                            <div class="mb-3">
+                                <label for="editChildName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="editChildName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBirthdate" class="form-label">Birth Date</label>
+                                <input type="date" class="form-control" id="editBirthdate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editGender" class="form-label">Gender</label>
+                                <select class="form-control" id="editGender">
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="updateChild()">Save Changes</button>
+                    </div>
+                </div>
         <!-- Activity Form (Hidden by default) -->
         <div id="activityFormContainer" class="card mt-4" style="display: none;">
             <div class="card-header">
