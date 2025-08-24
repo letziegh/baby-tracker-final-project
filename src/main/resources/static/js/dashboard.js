@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const childName = document.getElementById('childName').value;
         const birthdate = document.getElementById('birthdate').value;
+        const gender = document.getElementById('gender').value;
         
         // Get parent ID from the hidden input
         const parentId = document.getElementById('parentId').value;
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const childData = {
             name: childName,
             birthdate: birthdate,
+            gender: gender,
             parent: {
                 id: parentId
             }
@@ -41,6 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Clear form
             document.getElementById('childName').value = '';
             document.getElementById('birthdate').value = '';
+            document.getElementById('gender').value = 'MALE';
+            
+            // Hide form and show add children button
+            hideAddChildForm();
             
             // Reload children list
             loadChildren();
@@ -51,64 +57,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Add activity form submission
-    document.getElementById('addActivityForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const activityType = document.getElementById('activityType').value;
-        const startTime = document.getElementById('startTime').value;
-        const endTime = document.getElementById('endTime').value;
-        const notes = document.getElementById('notes').value;
-        const childId = document.getElementById('selectedChildId').value;
-        
-        const activityData = {
-            activityType: activityType,
-            startTime: startTime,
-            endTime: endTime,
-            notes: notes,
-            child: {
-                id: childId
-            }
-        };
-        
-        fetch('/api/activities', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(activityData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Clear form
-            document.getElementById('activityType').value = '';
-            document.getElementById('startTime').value = '';
-            document.getElementById('endTime').value = '';
-            document.getElementById('notes').value = '';
-            
-            // Hide activity form
-            document.getElementById('activityFormContainer').style.display = 'none';
-            
-            // Reload children list
-            loadChildren();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error adding activity. Please try again.');
-        });
-    });
+
 });
 
-// Add event delegation for settings buttons
+// Add event delegation for edit and delete buttons
 childrenList.addEventListener('click', function(e) {
-    if (e.target.classList.contains('settings-btn')) {
+    if (e.target.classList.contains('edit-btn')) {
         const child = JSON.parse(e.target.getAttribute('data-child'));
         openEditModal(child);
+    } else if (e.target.classList.contains('delete-btn')) {
+        const childId = e.target.getAttribute('data-child-id');
+        const childName = e.target.getAttribute('data-child-name');
+        deleteChild(childId, childName);
     }
 });
 
@@ -127,13 +87,24 @@ function loadChildren() {
                     <div class="card-body">
                         <h5 class="card-title">${child.name}</h5>
                         <p class="card-text">Age: ${child.age}</p>
-                        <button class="btn btn-primary" onclick="showActivityForm(${child.id})">Add Activity</button>
+                        <p class="card-text">Gender: ${child.gender || 'Not specified'}</p>
+                        <a href="/add-activity/${child.id}" class="btn btn-primary">Add Activity</a>
                         <a href="/api/children/${child.id}/activities" class="btn btn-info">View Activities</a>
-                        <button class="btn btn-secondary settings-btn" data-child='${JSON.stringify(child)}'>Settings</button>
+                        <button class="btn btn-warning edit-btn" data-child='${JSON.stringify(child)}'>Edit</button>
+                        <button class="btn btn-danger delete-btn" data-child-id="${child.id}" data-child-name="${child.name}">Delete</button>
                     </div>
                 `;
                 childrenList.appendChild(childElement);
             });
+
+            // Show/hide add child form and add children button
+            if (children.length === 0) {
+                document.getElementById('addChildFormContainer').style.display = '';
+                document.getElementById('addChildrenBtn').style.display = 'none';
+            } else {
+                document.getElementById('addChildFormContainer').style.display = 'none';
+                document.getElementById('addChildrenBtn').style.display = '';
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -183,11 +154,40 @@ function updateChild() {
     });
 }
 
-function showActivityForm(childId) {
-    document.getElementById('selectedChildId').value = childId;
-    document.getElementById('activityFormContainer').style.display = 'block';
-}
+
 
 function viewActivities(childId) {
     window.location.href = `/child/${childId}/activities`;
+}
+
+function showAddChildForm() {
+    document.getElementById('addChildFormContainer').style.display = 'block';
+    document.getElementById('addChildrenBtn').style.display = 'none';
+}
+
+function hideAddChildForm() {
+    document.getElementById('addChildFormContainer').style.display = 'none';
+    document.getElementById('addChildrenBtn').style.display = 'block';
+}
+
+function deleteChild(childId, childName) {
+    if (confirm(`Are you sure you want to delete ${childName}? This action cannot be undone and will also delete all associated activities.`)) {
+        fetch(`/api/children/${childId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            alert(`${childName} has been deleted successfully.`);
+            loadChildren();
+        })
+        .catch(error => {
+            console.error('Error deleting child:', error);
+            alert('Error deleting child. Please try again.');
+        });
+    }
 } 

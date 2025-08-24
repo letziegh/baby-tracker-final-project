@@ -37,10 +37,16 @@ function loadActivities() {
             activities.forEach(activity => {
                 const activityElement = document.createElement('div');
                 activityElement.className = 'list-group-item';
+                let diaperInfo = '';
+                if (activity.activityType === 'DIAPER' && activity.diaperCondition) {
+                    diaperInfo = `<p><strong>Diaper Condition:</strong> ${activity.diaperCondition}</p>`;
+                }
+                
                 activityElement.innerHTML = `
                     <h4>${activity.activityType}</h4>
                     <p>Start Time: ${new Date(activity.startTime).toLocaleString()}</p>
                     <p>End Time: ${activity.endTime ? new Date(activity.endTime).toLocaleString() : 'Ongoing'}</p>
+                    ${diaperInfo}
                     <p>Notes: ${activity.notes || 'No notes'}</p>
                     <div class="btn-group">
                         <button class="btn btn-warning btn-sm me-2" onclick="editActivity(${JSON.stringify(activity).replace(/"/g, '&quot;')})">Edit</button>
@@ -64,6 +70,17 @@ function editActivity(activity) {
     document.getElementById('editStartTime').value = formatDateTimeForInput(activity.startTime);
     document.getElementById('editEndTime').value = activity.endTime ? formatDateTimeForInput(activity.endTime) : '';
     document.getElementById('editNotes').value = activity.notes || '';
+    
+    // Handle diaper condition
+    if (activity.activityType === 'DIAPER') {
+        document.getElementById('editDiaperConditionContainer').style.display = 'block';
+        document.getElementById('editDiaperCondition').value = activity.diaperCondition || '';
+        document.getElementById('editDiaperCondition').required = true;
+    } else {
+        document.getElementById('editDiaperConditionContainer').style.display = 'none';
+        document.getElementById('editDiaperCondition').required = false;
+        document.getElementById('editDiaperCondition').value = '';
+    }
 
     // Show the modal
     const editModal = new bootstrap.Modal(document.getElementById('editActivityModal'));
@@ -83,6 +100,7 @@ function updateActivity() {
         startTime: document.getElementById('editStartTime').value,
         endTime: document.getElementById('editEndTime').value || null,
         notes: document.getElementById('editNotes').value,
+        diaperCondition: document.getElementById('editDiaperCondition').value,
         child: {
             id: document.getElementById('childId').value
         }
@@ -129,5 +147,19 @@ function deleteActivity(activityId) {
             console.error('Error deleting activity:', error);
             alert('Error deleting activity. Please try again.');
         });
+    }
+}
+
+function toggleEditDiaperCondition() {
+    const activityType = document.getElementById('editActivityType').value;
+    const diaperConditionContainer = document.getElementById('editDiaperConditionContainer');
+    
+    if (activityType === 'DIAPER') {
+        diaperConditionContainer.style.display = 'block';
+        document.getElementById('editDiaperCondition').required = true;
+    } else {
+        diaperConditionContainer.style.display = 'none';
+        document.getElementById('editDiaperCondition').required = false;
+        document.getElementById('editDiaperCondition').value = '';
     }
 } 

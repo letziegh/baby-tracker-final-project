@@ -21,6 +21,9 @@ public class Activity {
     @Column
     private String notes;
 
+    @Column
+    private String diaperCondition;
+
     @ManyToOne
     @JoinColumn(name = "child_id", nullable = false)
     @JsonBackReference
@@ -66,6 +69,14 @@ public class Activity {
         this.notes = notes;
     }
 
+    public String getDiaperCondition() {
+        return diaperCondition;
+    }
+
+    public void setDiaperCondition(String diaperCondition) {
+        this.diaperCondition = diaperCondition;
+    }
+
     public Child getChild() {
         return child;
     }
@@ -82,6 +93,7 @@ public class Activity {
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", notes='" + notes + '\'' +
+                ", diaperCondition='" + diaperCondition + '\'' +
                 '}';
     }
 }

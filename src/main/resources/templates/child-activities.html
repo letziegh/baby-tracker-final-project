@@ -12,7 +12,10 @@
     <div class="row mt-4">
         <div class="col-12">
             <h1>Activities for <span th:text="${child.name}"></span></h1>
-            <a href="/dashboard" class="btn btn-secondary mb-4">Back to Dashboard</a>
+            <div class="d-flex gap-2 mb-4">
+                <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+                <a th:href="@{'/add-activity/' + ${child.id}}" class="btn btn-primary">Add Activity</a>
+            </div>
         </div>
     </div>
 
@@ -45,12 +48,21 @@
                         <input type="hidden" id="editActivityId">
                         <div class="mb-3">
                             <label for="editActivityType" class="form-label">Activity Type</label>
-                            <select class="form-control" id="editActivityType" required>
+                            <select class="form-control" id="editActivityType" required onchange="toggleEditDiaperCondition()">
                                 <option value="FEEDING">Feeding</option>
                                 <option value="SLEEP">Sleep</option>
                                 <option value="DIAPER">Diaper Change</option>
                                 <option value="BATH">Bath</option>
                                 <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="editDiaperConditionContainer" style="display: none;">
+                            <label for="editDiaperCondition" class="form-label">Diaper Condition</label>
+                            <select class="form-control" id="editDiaperCondition">
+                                <option value="">Select Condition</option>
+                                <option value="WET">Wet</option>
+                                <option value="DIRTY">Dirty</option>
+                                <option value="BOTH">Both (Wet & Dirty)</option>
                             </select>
                         </div>
                         <div class="mb-3">

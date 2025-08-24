@@ -47,6 +47,7 @@ public class ActivityService {
                     existingActivity.setStartTime(updatedActivity.getStartTime());
                     existingActivity.setEndTime(updatedActivity.getEndTime());
                     existingActivity.setNotes(updatedActivity.getNotes());
+                    existingActivity.setDiaperCondition(updatedActivity.getDiaperCondition());
                     return activityRepository.save(existingActivity);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
