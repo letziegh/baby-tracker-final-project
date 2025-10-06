@@ -2,84 +2,124 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Activity - Baby Tracker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Activity - BabyTracker</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12">
-                <h1>Add Activity for <span th:text="${child.name}"></span></h1>
-                <a href="/dashboard" class="btn btn-secondary mb-4">Back to Dashboard</a>
-            </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <div class="baby-icon">👶</div>
+            <div class="logo-text">BabyTracker</div>
         </div>
+        <div class="user-icon">⚙️</div>
+    </header>
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Add New Activity</h3>
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/children" class="nav-item">
+                <span class="nav-icon">👶</span>
+                <span>Children</span>
+            </a>
+            <a href="/settings" class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1 class="page-title">Add Activity for <span th:text="${child.name}"></span></h1>
+                    <p class="page-subtitle">Record a new activity for your child.</p>
+                </div>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <span>← Back to Dashboard</span>
+                </a>
+            </div>
+
+            <div class="add-activity-layout">
+                <!-- Add Activity Form -->
+                <div class="add-activity-form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Add New Activity</h2>
                     </div>
-                    <div class="card-body">
-                        <form id="addActivityForm">
-                            <input type="hidden" id="childId" th:value="${child.id}">
-                            <div class="mb-3">
-                                <label for="activityType" class="form-label">Activity Type</label>
-                                <select class="form-control" id="activityType" required onchange="toggleDiaperCondition()">
-                                    <option value="">Select Activity Type</option>
-                                    <option value="FEEDING">Feeding</option>
-                                    <option value="SLEEP">Sleep</option>
-                                    <option value="DIAPER">Diaper Change</option>
-                                    <option value="BATH">Bath</option>
-                                    <option value="OTHER">Other</option>
-                                </select>
-                            </div>
-                            <div class="mb-3" id="diaperConditionContainer" style="display: none;">
-                                <label for="diaperCondition" class="form-label">Diaper Condition</label>
-                                <select class="form-control" id="diaperCondition">
-                                    <option value="">Select Condition</option>
-                                    <option value="WET">Wet</option>
-                                    <option value="DIRTY">Dirty</option>
-                                    <option value="BOTH">Both (Wet & Dirty)</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="startTime" class="form-label">Start Time</label>
-                                <input type="datetime-local" class="form-control" id="startTime" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="endTime" class="form-label">End Time</label>
-                                <input type="datetime-local" class="form-control" id="endTime">
-                            </div>
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="notes" rows="3" placeholder="Add any additional notes about this activity..."></textarea>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Add Activity</button>
-                                <a href="/dashboard" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </form>
+                    <form id="addActivityForm">
+                        <input type="hidden" id="childId" th:value="${child.id}">
+                        <div class="form-group">
+                            <label for="activityType" class="form-label">Activity Type *</label>
+                            <select class="form-control" id="activityType" required onchange="toggleDiaperCondition()">
+                                <option value="">Select Activity Type</option>
+                                <option value="FEEDING">Feeding</option>
+                                <option value="SLEEP">Sleep</option>
+                                <option value="DIAPER">Diaper Change</option>
+                                <option value="BATH">Bath</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="diaperConditionContainer" style="display: none;">
+                            <label for="diaperCondition" class="form-label">Diaper Condition</label>
+                            <select class="form-control" id="diaperCondition">
+                                <option value="">Select Condition</option>
+                                <option value="WET">Wet</option>
+                                <option value="DIRTY">Dirty</option>
+                                <option value="BOTH">Both (Wet & Dirty)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="startTime" class="form-label">Start Time *</label>
+                            <input type="datetime-local" class="form-control" id="startTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime" class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="endTime">
+                        </div>
+                        <div class="form-group">
+                            <label for="notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="Add any additional notes about this activity..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="plus-icon">+</span>
+                                <span>Add Activity</span>
+                            </button>
+                            <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Child Information -->
+                <div class="child-info-container">
+                    <div class="child-info-header">
+                        <h3 class="child-info-title">Child Information</h3>
+                    </div>
+                    <div class="child-info-content">
+                        <div class="child-info-item">
+                            <span class="child-info-label">Name:</span>
+                            <span class="child-info-value" th:text="${child.name}"></span>
+                        </div>
+                        <div class="child-info-item">
+                            <span class="child-info-label">Age:</span>
+                            <span class="child-info-value" th:text="${child.age}"></span>
+                        </div>
+                        <div class="child-info-item">
+                            <span class="child-info-label">Gender:</span>
+                            <span class="child-info-value" th:text="${child.gender}"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Child Information</h4>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Name:</strong> <span th:text="${child.name}"></span></p>
-                        <p><strong>Age:</strong> <span th:text="${child.age}"></span></p>
-                        <p><strong>Gender:</strong> <span th:text="${child.gender}"></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/add-activity.js"></script>
 </body>
 </html>

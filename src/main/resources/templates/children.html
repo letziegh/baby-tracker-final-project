@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BabyTracker Dashboard</title>
+    <title>Children - BabyTracker</title>
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
@@ -20,11 +20,11 @@
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <nav class="sidebar">
-            <a href="/dashboard" class="nav-item active">
+            <a href="/dashboard" class="nav-item">
                 <span class="nav-icon">🏠</span>
                 <span>Dashboard</span>
             </a>
-            <a href="/children" class="nav-item">
+            <a href="/children" class="nav-item active">
                 <span class="nav-icon">👶</span>
                 <span>Children</span>
             </a>
@@ -36,22 +36,34 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="dashboard-header">
-                <h1 class="dashboard-title">Dashboard</h1>
-                <p class="dashboard-subtitle">Manage your children's profiles and track their activities.</p>
-                <a href="/add-child" class="add-child-btn">
-                    <span class="plus-icon">+</span>
-                    <span>Add Child</span>
-                </a>
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1 class="page-title">All Children</h1>
+                    <p class="page-subtitle">Manage and view all your children's profiles.</p>
+                </div>
+                <div class="page-actions">
+                    <a href="/add-child" class="btn btn-primary">
+                        <span class="plus-icon">+</span>
+                        <span>Add Child</span>
+                    </a>
+                    <a href="/dashboard" class="btn btn-secondary">
+                        <span>← Back to Dashboard</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Hidden parent ID -->
             <input type="hidden" id="parentId" th:value="${parent.id}">
             
-            
-            <!-- Children Grid -->
-            <div id="childrenGrid" class="children-grid">
-                <!-- Children will be loaded here dynamically -->
+            <!-- Children List -->
+            <div class="children-list-container">
+                <div class="children-list-header">
+                    <h2 class="children-list-title">Your Children</h2>
+                    <div class="children-count" id="childrenCount">Loading...</div>
+                </div>
+                <div id="childrenList" class="children-list">
+                    <!-- Children will be loaded here dynamically -->
+                </div>
             </div>
             
             <!-- Empty State -->
@@ -64,6 +76,6 @@
         </main>
     </div>
     
-    <script src="/js/dashboard.js"></script>
+    <script src="/js/children.js"></script>
 </body>
 </html>

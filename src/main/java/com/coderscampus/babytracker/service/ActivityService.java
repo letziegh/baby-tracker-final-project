@@ -52,4 +52,14 @@ public class ActivityService {
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
     }
+
+    public Activity getLastActivityByChildId(Long childId) {
+        List<Activity> activities = activityRepository.findByChildId(childId);
+        if (activities.isEmpty()) {
+            return null;
+        }
+        // Assuming activities are ordered by creation time (newest first)
+        // You might want to add proper ordering in the repository
+        return activities.get(0);
+    }
 }

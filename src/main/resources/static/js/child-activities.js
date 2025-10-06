@@ -30,27 +30,39 @@ function loadActivities() {
             activitiesList.innerHTML = '';
             
             if (activities.length === 0) {
-                activitiesList.innerHTML = '<div class="list-group-item">No activities recorded yet.</div>';
+                activitiesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3 class="empty-state-title">No activities recorded yet</h3>
+                        <p class="empty-state-message">Start tracking your child's activities by adding the first one.</p>
+                    </div>
+                `;
                 return;
             }
             
             activities.forEach(activity => {
                 const activityElement = document.createElement('div');
-                activityElement.className = 'list-group-item';
+                activityElement.className = 'activity-item';
+                
                 let diaperInfo = '';
                 if (activity.activityType === 'DIAPER' && activity.diaperCondition) {
-                    diaperInfo = `<p><strong>Diaper Condition:</strong> ${activity.diaperCondition}</p>`;
+                    diaperInfo = `<div class="activity-notes">Diaper Condition: ${activity.diaperCondition}</div>`;
                 }
                 
+                const startTime = new Date(activity.startTime).toLocaleString();
+                const endTime = activity.endTime ? new Date(activity.endTime).toLocaleString() : 'Ongoing';
+                const notes = activity.notes ? `<div class="activity-notes">${activity.notes}</div>` : '';
+                
                 activityElement.innerHTML = `
-                    <h4>${activity.activityType}</h4>
-                    <p>Start Time: ${new Date(activity.startTime).toLocaleString()}</p>
-                    <p>End Time: ${activity.endTime ? new Date(activity.endTime).toLocaleString() : 'Ongoing'}</p>
-                    ${diaperInfo}
-                    <p>Notes: ${activity.notes || 'No notes'}</p>
-                    <div class="btn-group">
-                        <button class="btn btn-warning btn-sm me-2" onclick="editActivity(${JSON.stringify(activity).replace(/"/g, '&quot;')})">Edit</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteActivity(${activity.id})">Delete</button>
+                    <div class="activity-info">
+                        <div class="activity-type">${activity.activityType}</div>
+                        <div class="activity-time">${startTime} - ${endTime}</div>
+                        ${diaperInfo}
+                        ${notes}
+                    </div>
+                    <div class="activity-actions">
+                        <button class="edit-activity-btn" onclick="editActivity(${JSON.stringify(activity).replace(/"/g, '&quot;')})">Edit</button>
+                        <button class="delete-activity-btn" onclick="deleteActivity(${activity.id})">Delete</button>
                     </div>
                 `;
                 activitiesList.appendChild(activityElement);
@@ -83,8 +95,7 @@ function editActivity(activity) {
     }
 
     // Show the modal
-    const editModal = new bootstrap.Modal(document.getElementById('editActivityModal'));
-    editModal.show();
+    document.getElementById('editActivityModal').style.display = 'flex';
 }
 
 function formatDateTimeForInput(dateTimeString) {
@@ -118,8 +129,7 @@ function updateActivity() {
             throw new Error('Network response was not ok');
         }
         // Close the modal
-        const editModal = bootstrap.Modal.getInstance(document.getElementById('editActivityModal'));
-        editModal.hide();
+        closeEditModal();
         // Reload activities
         loadActivities();
     })
@@ -148,6 +158,10 @@ function deleteActivity(activityId) {
             alert('Error deleting activity. Please try again.');
         });
     }
+}
+
+function closeEditModal() {
+    document.getElementById('editActivityModal').style.display = 'none';
 }
 
 function toggleEditDiaperCondition() {

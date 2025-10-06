@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Child - BabyTracker</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <div class="baby-icon">👶</div>
+            <div class="logo-text">BabyTracker</div>
+        </div>
+        <div class="user-icon">⚙️</div>
+    </header>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/children" class="nav-item">
+                <span class="nav-icon">👶</span>
+                <span>Children</span>
+            </a>
+            <a href="/settings" class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1 class="page-title">Add New Child</h1>
+                    <p class="page-subtitle">Enter your child's information to start tracking their activities.</p>
+                </div>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <span>← Back to Dashboard</span>
+                </a>
+            </div>
+
+            <!-- Hidden parent ID -->
+            <input type="hidden" id="parentId" th:value="${parent.id}">
+            
+            <!-- Add Child Form -->
+            <div class="add-child-form-container show">
+                <form id="addChildForm">
+                    <div class="form-group">
+                        <label for="childName" class="form-label">Child's Name *</label>
+                        <input type="text" class="form-control" id="childName" required placeholder="Enter your child's name">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdate" class="form-label">Birth Date *</label>
+                        <input type="date" class="form-control" id="birthdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender *</label>
+                        <select class="form-control" id="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="plus-icon">+</span>
+                            <span>Add Child</span>
+                        </button>
+                        <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/js/add-child.js"></script>
+</body>
+</html>

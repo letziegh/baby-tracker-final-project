@@ -1,6 +1,8 @@
 package com.coderscampus.babytracker.service;
 
+import com.coderscampus.babytracker.domain.Activity;
 import com.coderscampus.babytracker.domain.Child;
+import com.coderscampus.babytracker.domain.ChildWithLastActivity;
 import com.coderscampus.babytracker.domain.Parent;
 import com.coderscampus.babytracker.repository.ChildRepository;
 import com.coderscampus.babytracker.repository.ParentRepository;
@@ -8,16 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ChildService {
     private final ChildRepository childRepository;
     private final ParentRepository parentRepository;
+    private final ActivityService activityService;
 
-    public ChildService(ChildRepository childRepository, ParentRepository parentRepository) {
+    public ChildService(ChildRepository childRepository, ParentRepository parentRepository, ActivityService activityService) {
         this.childRepository = childRepository;
         this.parentRepository = parentRepository;
+        this.activityService = activityService;
     }
 
     public Child addChild(Child child) {
@@ -59,5 +64,15 @@ public class ChildService {
 
     public void deleteChild(Long id) {
         childRepository.deleteById(id);
+    }
+
+    public List<ChildWithLastActivity> getChildrenByParentWithLastActivity(Long parentId) {
+        List<Child> children = childRepository.findByParentId(parentId);
+        return children.stream()
+                .map(child -> {
+                    Activity lastActivity = activityService.getLastActivityByChildId(child.getId());
+                    return new ChildWithLastActivity(child, lastActivity);
+                })
+                .collect(Collectors.toList());
     }
 }
