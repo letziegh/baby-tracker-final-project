@@ -46,6 +46,5 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.updateActivity(id, activity));
     }
 
-    //page for handling Tools: feeding tracker, diaper tracker, sleep tracker
-    //add method for deleting activity record
+    
 }
